@@ -151,9 +151,11 @@ const load = async () => {
             }).then(function () {
                 if(skip==0)console.log("Done Input");
                 else console.log("Already have data in Table superstore");
-                process.exit(0)
+                setTimeout((function() {
+                    return process.exit(0);
+                }), 1000);
             });
         }
     });
 }
-load();
+load()
