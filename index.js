@@ -51,6 +51,10 @@ const load = async () => {
     })
 
     //syntaxnya username:password@server:port/database_name
+    // untuk localhost biasa
+    // const pgConString = "postgres://postgres:1234@localhost:5432/staging_ingestion";
+
+    // untuk postgre docker
     // const pgConString = "postgres://postgres:mysecretpassword@172.17.0.2:5432/staging_ingestion";
     const pgConString = "postgres://"+process.env.USER2+":"+process.env.PASSWORD2+"@"+process.env.HOST2+":"+process.env.PORT2+"/"+process.env.DATABASE2;
     var clientpg = new pg.Client(pgConString);
