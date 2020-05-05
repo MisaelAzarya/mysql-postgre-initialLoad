@@ -32,11 +32,16 @@ function promiseWhile(condition, body) {
 
 const load = async () => {
     const mysqlConnection = mysql.createConnection({
-        host: "192.168.65.2",
-        user: "root",
-        password: "",
-        port: "3306",
-        database: "supersample"
+        // host: "192.168.65.2",
+        // user: "root",
+        // password: "",
+        // port: "3306",
+        // database: "supersample"
+        host: process.env.HOST,
+        user: process.env.USER,
+        password: process.env.PASSWORD,
+        port: process.env.PORT,
+        database: process.env.DATABASE
     });
     mysqlConnection.connect(function(err){
         if(err)throw err;
@@ -46,12 +51,14 @@ const load = async () => {
     })
 
     //syntaxnya username:password@server:port/database_name
-    const pgConString = "postgres://postgres:mysecretpassword@172.17.0.2:5432/staging_ingestion";
+    // const pgConString = "postgres://postgres:mysecretpassword@172.17.0.2:5432/staging_ingestion";
+    const pgConString = "postgres://"+process.env.USER2+":"+process.env.PASSWORD2+"@"+process.env.HOST2+":"+process.env.PORT2+"/"+process.env.DATABASE2;
     var clientpg = new pg.Client(pgConString);
 
     await clientpg.connect();
     console.log("client pg");
 
+    var dropTable="DROP TABLE IF EXISTS superstore";
     var pgTable = "CREATE TABLE IF NOT EXISTS superstore (" +
                     "row_ID serial PRIMARY KEY," +
                     "order_id VARCHAR(14)," +
@@ -83,6 +90,8 @@ const load = async () => {
                     "operation VARCHAR(10)" +
                 ");";
 
+    await clientpg.query(dropTable);
+    console.log("Drop Table superstore");
     await clientpg.query(pgTable);
     console.log("Create Table superstore");
     await clientpg.query(pgTable2);
